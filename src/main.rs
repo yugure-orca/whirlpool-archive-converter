@@ -2,7 +2,7 @@ use clap::Parser;
 use commands::Commands;
 
 mod commands;
-mod event;
+mod model;
 
 #[derive(Parser, Debug)]
 struct Args {
@@ -24,6 +24,21 @@ async fn main() {
             whirlpool_token_file_path,
             whirlpool_transaction_file_path,
             whirlpool_event_file_path,
+        )
+        .await
+        .unwrap(),
+        Commands::Ohlcv {
+            whirlpool_state_file_path,
+            whirlpool_token_file_path,
+            whirlpool_event_file_path,
+            whirlpool_ohlcv_daily_file_path,
+            whirlpool_ohlcv_minutely_file_path,
+        } => commands::ohlcv::process(
+            whirlpool_state_file_path,
+            whirlpool_token_file_path,
+            whirlpool_event_file_path,
+            whirlpool_ohlcv_daily_file_path,
+            whirlpool_ohlcv_minutely_file_path,
         )
         .await
         .unwrap(),

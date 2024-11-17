@@ -1,4 +1,4 @@
-use crate::event::{
+use crate::model::event::{
     convert::build_whirlpool_events, definition::ProgramDeployedEventPayload, WhirlpoolEvent,
     WhirlpoolEventBlock, WhirlpoolEventTransaction,
 };
