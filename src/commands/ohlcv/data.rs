@@ -149,12 +149,14 @@ impl From<&OhlcvData> for ohlcv::WhirlpoolOhlcvDailyData {
 // impl OhlcvData into WhirlpoolOhlcvMinutelyData
 impl From<&OhlcvData> for ohlcv::WhirlpoolOhlcvMinutelyData {
   fn from(ohlcv_data: &OhlcvData) -> Self {
+    let mut minutely = ohlcv_data.minutely.values().map(|data| convert_to_ohlcv_data_unit(data, ohlcv_data.metadata.decimals_a, ohlcv_data.metadata.decimals_b)).collect::<Vec<_>>();
+    minutely.sort_by_key(|data| data.timestamp);
     Self {
       metadata: ohlcv::WhirlpoolOhlcvMetadata::from(ohlcv_data),
       initial_state: ohlcv::InitialState::from(ohlcv_data),
       estimated_fees: ohlcv::EstimatedFees::from(ohlcv_data),
       daily: convert_to_ohlcv_data_unit(&ohlcv_data.daily, ohlcv_data.metadata.decimals_a, ohlcv_data.metadata.decimals_b),
-      minutely: ohlcv_data.minutely.values().map(|data| convert_to_ohlcv_data_unit(data, ohlcv_data.metadata.decimals_a, ohlcv_data.metadata.decimals_b)).collect(),
+      minutely,
     }
   }
 }
@@ -255,7 +257,7 @@ struct VolumeData {
 fn convert_to_ohlcv_data_unit(data: &SqrtPriceOhlcvDataUnit, decimals_a: u8, decimals_b: u8) -> ohlcv::WhirlpoolOhlcvDataUnit {
   ohlcv::WhirlpoolOhlcvDataUnit {
     timestamp: data.timestamp,
-    ohlcv: ohlcv::WhirlpoolOhlcvData {
+    ohlc: ohlcv::WhirlpoolOhlcvData {
       sqrt_price: ohlcv::SqrtPriceData {
         open: data.open,
         high: data.high,

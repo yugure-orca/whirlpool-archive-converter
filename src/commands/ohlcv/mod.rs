@@ -18,6 +18,7 @@ pub async fn process(
   whirlpool_ohlcv_daily_file_path: String,
   whirlpool_ohlcv_minutely_file_path: String,
 ) -> Result<()> {
+  println!("open files...");
   let (state, event_block_iter, decimals) = io::build_with_local_file_storage(
     whirlpool_state_file_path,
     whirlpool_token_file_path,
@@ -32,6 +33,7 @@ pub async fn process(
 
   let mut ohlcv_data_manager = data::OhlcvDataManager::new(daily_timestamp);
 
+  println!("traverse accounts...");
   state.accounts.traverse(|pubkey, data| {
     if data.starts_with(&whirlpool_base::state::Whirlpool::DISCRIMINATOR) {
       let whirlpool = whirlpool_base::state::Whirlpool::try_deserialize(&mut data.as_slice()).unwrap();
@@ -52,6 +54,7 @@ pub async fn process(
     Ok(())
   })?;
 
+  println!("process events...");
   for event_block in event_block_iter {
     event_block.transactions.iter().for_each(|transaction| {
       transaction.events.iter().for_each(|event| {
@@ -69,6 +72,7 @@ pub async fn process(
   }
 
   // write daily file
+  println!("write daily file...");
   let f = File::create(whirlpool_ohlcv_daily_file_path).unwrap();
   let encoder = GzEncoder::new(f, flate2::Compression::default());
   let mut writer = LineWriter::new(encoder);
@@ -80,6 +84,7 @@ pub async fn process(
   writer.flush().unwrap();
 
   // write minutely file
+  println!("write minutely file...");
   let f = File::create(whirlpool_ohlcv_minutely_file_path).unwrap();
   let encoder = GzEncoder::new(f, flate2::Compression::default());
   let mut writer = LineWriter::new(encoder);

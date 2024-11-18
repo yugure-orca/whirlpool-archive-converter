@@ -26,7 +26,7 @@ Each line is a JSON object with the following schema:
   },
   daily(d): {
     timestamp(t): i64(UTC, UNIX timestamp in seconds, first second of the day),
-    ohlc(ohlc): { sqrtPrice(sp): { open(o): String, high(h): String, low(l): String, close(c): String }, decimalPrice(dp): { open(o): String, high(h): String, low(l): String, close(c): String } },
+    ohlc(p): { sqrtPrice(sp): { open(o): String, high(h): String, low(l): String, close(c): String }, decimalPrice(dp): { open(o): String, high(h): String, low(l): String, close(c): String } },
     volume(v): {
       ab: { totalIn(ti): String, totalOut(to): String, count(c): u64 },
       ba: { totalIn(ti): String, totalOut(to): String, count(c): u64 },
@@ -58,7 +58,7 @@ Each line is a JSON object with the following schema:
   },
   daily(d): {
     timestamp(t): i64(UTC, UNIX timestamp in seconds, first second of the day),
-    ohlc(ohlc): { sqrtPrice(sp): { open(o): String, high(h): String, low(l): String, close(c): String }, decimalPrice(dp): { open(o): String, high(h): String, low(l): String, close(c): String } },
+    ohlc(p): { sqrtPrice(sp): { open(o): String, high(h): String, low(l): String, close(c): String }, decimalPrice(dp): { open(o): String, high(h): String, low(l): String, close(c): String } },
     volume(v): {
       ab: { totalIn(ti): String, totalOut(to): String, count(c): u64 },
       ba: { totalIn(ti): String, totalOut(to): String, count(c): u64 },
@@ -67,7 +67,7 @@ Each line is a JSON object with the following schema:
   minutely(m): [
     {
       timestamp(t): i64(UTC, UNIX timestamp in seconds, first second of the minute),
-      ohlc(ohlc): { sqrtPrice(sp): { open(o): String, high(h): String, low(l): String, close(c): String }, decimalPrice(dp): { open(o): String, high(h): String, low(l): String, close(c): String } },
+      ohlc(p): { sqrtPrice(sp): { open(o): String, high(h): String, low(l): String, close(c): String }, decimalPrice(dp): { open(o): String, high(h): String, low(l): String, close(c): String } },
       volume(v): {
         ab: { totalIn(ti): String, totalOut(to): String, count(c): u64 },
         ba: { totalIn(ti): String, totalOut(to): String, count(c): u64 },
@@ -170,7 +170,8 @@ pub struct EstimatedFees {
 pub struct WhirlpoolOhlcvDataUnit {
   #[serde(rename = "t")]
   pub timestamp: i64,
-  pub ohlcv: WhirlpoolOhlcvData,
+  #[serde(rename = "p")]
+  pub ohlc: WhirlpoolOhlcvData,
   #[serde(rename = "v")]
   pub volume: VolumeData,
 }
