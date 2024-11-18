@@ -86,59 +86,62 @@ pub type Decimals = u8;
 #[derive(Serialize, Debug, PartialEq, Eq)]
 pub struct WhirlpoolOhlcvDailyData {
   #[serde(flatten)]
-  metadata: WhirlpoolOhlcvMetadata,
+  pub metadata: WhirlpoolOhlcvMetadata,
   #[serde(rename = "is")]
-  initial_state: InitialState,
+  pub initial_state: InitialState,
   #[serde(rename = "ef")]
-  estimated_fees: EstimatedFees,
+  pub estimated_fees: EstimatedFees,
   #[serde(rename = "d")]
-  daily: WhirlpoolOhlcvDataUnit,
+  pub daily: WhirlpoolOhlcvDataUnit,
 }
 
 #[derive(Serialize, Debug, PartialEq, Eq)]
 pub struct WhirlpoolOhlcvMinutelyData {
   #[serde(flatten)]
-  metadata: WhirlpoolOhlcvMetadata,
+  pub metadata: WhirlpoolOhlcvMetadata,
   #[serde(rename = "is")]
-  initial_state: InitialState,
+  pub initial_state: InitialState,
   #[serde(rename = "ef")]
-  estimated_fees: EstimatedFees,
+  pub estimated_fees: EstimatedFees,
   #[serde(rename = "d")]
-  daily: WhirlpoolOhlcvDataUnit,
+  pub daily: WhirlpoolOhlcvDataUnit,
   #[serde(rename = "m")]
-  minutely: Vec<WhirlpoolOhlcvDataUnit>,
+  pub minutely: Vec<WhirlpoolOhlcvDataUnit>,
 }
 
 #[derive(Serialize, Debug, PartialEq, Eq)]
 pub struct WhirlpoolOhlcvMetadata {
   #[serde(rename = "w")]
-  whirlpool: PubkeyString,
+  pub whirlpool: PubkeyString,
   #[serde(rename = "wc")]
-  whirlpools_config: PubkeyString,
+  pub whirlpools_config: PubkeyString,
   #[serde(rename = "ta")]
-  token_a: TokenData,
+  pub token_a: TokenData,
   #[serde(rename = "tb")]
-  token_b: TokenData,
+  pub token_b: TokenData,
   #[serde(rename = "ts")]
-  tick_spacing: u16,
+  pub tick_spacing: u16,
 }
 
 #[derive(Serialize, Debug, PartialEq, Eq)]
 pub struct TokenData {
   #[serde(rename = "m")]
-  mint: PubkeyString,
+  pub mint: PubkeyString,
   #[serde(rename = "d")]
-  decimals: Decimals,
+  pub decimals: Decimals,
 }
 
 #[derive(Serialize, Debug, PartialEq, Eq)]
+#[serde(tag = "t", content = "p")]
 pub enum InitialState {
+  #[serde(rename = "e")]
   Existing {
     #[serde(rename = "pcsp", with = "string_u128")]
     previous_close_sqrt_price: u128,
     #[serde(rename = "pcdp", with = "string_decimal_price")]
     previous_close_decimal_price: DecimalPrice,
   },
+  #[serde(rename = "n")]
   New {
     #[serde(rename = "isp", with = "string_u128")]
     initial_sqrt_price: u128,
@@ -154,68 +157,68 @@ pub enum InitialState {
 #[derive(Serialize, Debug, PartialEq, Eq)]
 pub struct EstimatedFees {
   #[serde(rename = "lpfa", with = "string_u64")]
-  liquidity_provider_fee_a: u64,
+  pub liquidity_provider_fee_a: u64,
   #[serde(rename = "lpfb", with = "string_u64")]
-  liquidity_provider_fee_b: u64,
+  pub liquidity_provider_fee_b: u64,
   #[serde(rename = "pfa", with = "string_u64")]
-  protocol_fee_a: u64,
+  pub protocol_fee_a: u64,
   #[serde(rename = "pfb", with = "string_u64")]
-  protocol_fee_b: u64,
+  pub protocol_fee_b: u64,
 }
 
 #[derive(Serialize, Debug, PartialEq, Eq)]
 pub struct WhirlpoolOhlcvDataUnit {
   #[serde(rename = "t")]
-  timestamp: i64,
-  ohlcv: WhirlpoolOhlcvData,
+  pub timestamp: i64,
+  pub ohlcv: WhirlpoolOhlcvData,
   #[serde(rename = "v")]
-  volume: VolumeData,
+  pub volume: VolumeData,
 }
 
 #[derive(Serialize, Debug, PartialEq, Eq)]
 pub struct WhirlpoolOhlcvData {
   #[serde(rename = "sp")]
-  sqrt_price: SqrtPriceData,
+  pub sqrt_price: SqrtPriceData,
   #[serde(rename = "dp")]
-  decimal_price: DecimalPriceData,
+  pub decimal_price: DecimalPriceData,
 }
 
 #[derive(Serialize, Debug, PartialEq, Eq)]
 pub struct SqrtPriceData {
   #[serde(rename = "o", with = "string_u128")]
-  open: u128,
+  pub open: u128,
   #[serde(rename = "h", with = "string_u128")]
-  high: u128,
+  pub high: u128,
   #[serde(rename = "l", with = "string_u128")]
-  low: u128,
+  pub low: u128,
   #[serde(rename = "c", with = "string_u128")]
-  close: u128,
+  pub close: u128,
 }
 
 #[derive(Serialize, Debug, PartialEq, Eq)]
 pub struct DecimalPriceData {
   #[serde(rename = "o", with = "string_decimal_price")]
-  open: DecimalPrice,
+  pub open: DecimalPrice,
   #[serde(rename = "h", with = "string_decimal_price")]
-  high: DecimalPrice,
+  pub high: DecimalPrice,
   #[serde(rename = "l", with = "string_decimal_price")]
-  low: DecimalPrice,
+  pub low: DecimalPrice,
   #[serde(rename = "c", with = "string_decimal_price")]
-  close: DecimalPrice,
+  pub close: DecimalPrice,
 }
 
 #[derive(Serialize, Debug, PartialEq, Eq)]
 pub struct VolumeData {
-  ab: VolumeDirectionData,
-  ba: VolumeDirectionData,
+  pub ab: VolumeDirectionData,
+  pub ba: VolumeDirectionData,
 }
 
 #[derive(Serialize, Debug, PartialEq, Eq)]
 pub struct VolumeDirectionData {
   #[serde(rename = "ti", with = "string_u128")]
-  total_in: u128,
+  pub total_in: u128,
   #[serde(rename = "to", with = "string_u128")]
-  total_out: u128,
+  pub total_out: u128,
   #[serde(rename = "c")]
-  count: u64,
+  pub count: u64,
 }
